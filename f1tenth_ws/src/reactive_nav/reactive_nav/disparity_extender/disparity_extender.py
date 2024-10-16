@@ -44,6 +44,10 @@ class DisparityExtender:
         index_count = self.get_index_count(self.safety_bubble_diameter, front_range, self.angle_increment)
         mean_front_range = np.mean(self.ranges[front_index-index_count//2:front_index+index_count//2])
 
+        # cutoff
+        if self.do_range_cutoff:
+            self.ranges[self.ranges > self.cutoff_range] = self.cutoff_range
+
 
 
 
