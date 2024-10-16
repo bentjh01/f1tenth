@@ -7,7 +7,6 @@ class Config:
     def __init__():
         # Disparity Extender config
         self.safety_bubble_diameter = 0.6 #[m]
-        self.do_range_cutoff = True
         self.range_cutoff = 5 #[m]
         self.disparity_trigger = 0.6 #[m]
         # ROS2 Config
@@ -27,7 +26,6 @@ class DisparityExtender:
         self.diparity_trigger = c.disparity_trigger
         self.safety_bubble_diameter = c.safety_bubble_diameter
         self.range_cutoff = c.range_cutoff
-        self.do_range_cutoff = c.do_range_cutoff
 
     def cutoff_range(self):
         if self.do_range_cutoff:
@@ -46,10 +44,21 @@ class DisparityExtender:
         index_count = self.get_index_count(self.safety_bubble_diameter, front_range, self.angle_increment)
         mean_front_range = np.mean(self.ranges[front_index-index_count//2:front_index+index_count//2])
 
-        # cutoff
-        if self.do_range_cutoff:
-            self.ranges[self.ranges > self.cutoff_range] = self.cutoff_range
+        # Min Filter
+        unmodified_ranges = self.ranges.copy()
+        for i, r in enumerate(self.ranges):
+            index_count = self.get_index_count(self.safety_bubble_diameter, r, self.angle_increment)
+            radius_count = int(index_count//2)
+            range_count = self.ranges.shape[0]
+            if (radius_count <= i < (range_count-radius_count)):
+                min_range = np.min(unmodified_ranges[i-radius_count:i+radius_count])
+            elif (i < radius_count):
+                min_range = np.min(unmodified_ranges[:i+radius_count])
+            else:
+                min_range = np.min(unmodified_ranges[i-radius_count:])
+            self.ranges[i] = min_range
 
+        speed = mean_front_range/range_cutoff * self.max_speed
 
 
 
