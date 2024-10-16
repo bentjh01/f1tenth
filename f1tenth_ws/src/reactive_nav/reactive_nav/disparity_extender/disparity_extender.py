@@ -58,7 +58,12 @@ class DisparityExtender:
                 min_range = np.min(unmodified_ranges[i-radius_count:])
             self.ranges[i] = min_range
 
-        speed = mean_front_range/range_cutoff * self.max_speed
+        # select max range
+        max_index = np.argmax(self.ranges)
+        goal_bearing = self.angle_increment * (max_index - self.ranges.shape[0]//2)
+
+        steering = goal_bearing
+        speed = min(mean_front_range/range_cutoff,1) * self.max_speed
 
 
 
