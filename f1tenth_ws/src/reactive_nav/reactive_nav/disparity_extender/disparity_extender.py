@@ -7,6 +7,7 @@ class Config:
     def __init__():
         # Disparity Extender config
         self.safety_bubble_diameter = 0.6 #[m]
+        self.do_range_cutoff = True
         self.range_cutoff = 5 #[m]
         self.disparity_trigger = 0.6 #[m]
         # ROS2 Config
@@ -18,18 +19,32 @@ class DisparityExtender:
     def __init__:
         self.load_config()
         self.ranges = LaserScan()
+        self.mean_front_range = 0 #[m]
+        self.angle_increment = 3.142/1024 #[rad]
 
     def load_config(self):
         c = Config()
         self.diparity_trigger = c.disparity_trigger
         self.safety_bubble_diameter = c.safety_bubble_diameter
         self.range_cutoff = c.range_cutoff
+        self.do_range_cutoff = c.do_range_cutoff
 
     def cutoff_range(self):
+        if self.do_range_cutoff:
+            self.ranges[self.ranges > self.range_cutoff] = self.range_cutoff
+    
+    def get_index_count(self, diameter, range, angle_increment):
+        arc = range * angle_increment
+        return int(diameter/arc)
         
-        self.ranges_topic(<=self.cutoff_range)
+    def update(self, scan_msg):
+        self.ranges = scan_msg.ranges
+        front_index = int(len(self.ranges)//2)
+        front_range = self.ranges[front_index]
+        index_count = self.get_index_count(self.safety_bubble_diameter, front_range, self.angle_increment)
+        mean_front_range = np.mean(self.ranges[front_index-index_count//2:front_index+index_count//2])
 
-    def 
+
 
 
 class DisparityExtenderNode(Node):
