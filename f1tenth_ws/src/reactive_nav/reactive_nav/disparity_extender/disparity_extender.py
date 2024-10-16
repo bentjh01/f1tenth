@@ -39,6 +39,8 @@ class DisparityExtender:
         
     def update(self, scan_msg):
         self.ranges = scan_msg.ranges
+
+        # mean front distance
         front_index = int(len(self.ranges)//2)
         front_range = self.ranges[front_index]
         index_count = self.get_index_count(self.safety_bubble_diameter, front_range, self.angle_increment)
