@@ -19,8 +19,11 @@ class TestSpeed2ErpmGain(Node):
         self.timer = self.create_timer(self.publish_period, self.timer_callback)
         self.start_time = self.get_clock().now().nanoseconds
 
+    def get_time(self):
+        return self.get_clock().now().nanoseconds / 1e9
+
     def timer_callback(self):
-      if (self.get_clock().now().nanoseconds - self.start_time)/1e9 <= self.max_time:
+      if (self.get_time()) <= self.max_time:
         twist_msg = self.get_twist_msg()
         self.publisher_.publish(twist_msg)
       else:

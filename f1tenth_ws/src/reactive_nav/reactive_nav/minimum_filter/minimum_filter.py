@@ -54,8 +54,6 @@ class MinimumFilter:
         speed = min(mean_front_range/self.range_cutoff,1) * self.max_speed
         return speed, steering
 
-
-
 class MinimumFilterNode(Node):
     def __init__():
         super.__init__("minimum_filter")
