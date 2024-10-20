@@ -93,7 +93,7 @@ class DisparityExtenderNode(Node):
         self.scan_subscriber = self.create_subscription(LaserScan, self.laser_topic, self.scan_callback, 10)
         self.scan_subscriber
 
-        self.drive_publisher = self.create_publisher(Twist, self.drive_topic, 10)
+        self.drive_publisher = self.create_publisher(AckermannDriveStamped, self.drive_topic, 10)
         self.timer = self.create_timer(1.0 / self.publish_rate, self.timer_callback)
         self.drive_msg = AckermannDriveStamped()
 
