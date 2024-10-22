@@ -1,9 +1,20 @@
 import rclpy
-from rclpy import Node
+from rclpy.node import Node
 import numpy as np
-from sensor_msgs import LaserScan
-from ackermann_msgs import AckermannDriveStamped
+from sensor_msgs.msg import LaserScan
+from ackermann_msgs.msg import AckermannDriveStamped
 
+config = {
+    "safety_bubble_diameter": 0.6, # [m]
+    "range_cutoff": 5, # [m]
+    "disparity_threshold": 0.6, # [m]
+    "linear_x_proportional_gain": 1,
+    "angular_z_proportional_gain": 1,
+    "max_speed": 10, # [m/s]
+    "publish_rate": 100, # [Hz]
+    "drive_topic": "/drive",
+    "ranges_topic": "/scan"
+}
 class Config:
     def __init__(self):
         # Disparity Extender config
@@ -18,11 +29,10 @@ class Config:
 
 class MinimumFilter:
     def __init__(self):
-        config = Config()
-        self.safety_bubble_diameter = config.safety_bubble_diameter
-        self.range_cutoff = config.range_cutoff
-        self.linear_x_proportional_gain = config.linear_x_proportional_gain
-        self.angular_z_proportional_gain = config.angular_z_proportional_gain
+        self.safety_bubble_diameter = config["safety_bubble_diameter"]
+        self.range_cutoff = config["range_cutoff"]
+        self.linear_x_proportional_gain = config["linear_x_proportional_gain"]
+        self.angular_z_proportional_gain = config["angular_z_proportional_gain"]
         self.mean_front_range = 0 #[m]
 
     def update(self, ranges, angle_increment):
@@ -57,16 +67,15 @@ class MinimumFilter:
 
 class MinimumFilterNode(Node):
     def __init__(self):
-        super.__init__("minimum_filter")
-        config = Config()
+        super().__init__("minimum_filter")
 
         self.minimum_filter = MinimumFilter()
 
-        self.cmd_vel_publisher = self.create_publisher(AckermannDriveStamped, config.drive_topic, 10)
-        self.cmd_vel_timer = self.create_timer(1.0/config.publish_rate, self.timer_callback)
+        self.cmd_vel_publisher = self.create_publisher(AckermannDriveStamped, config["drive_topic"], 10)
+        self.cmd_vel_timer = self.create_timer(1.0/config["publish_rate"], self.timer_callback)
         self.drive_msg = AckermannDriveStamped()
 
-        self.scan_subscriber = self.create_subscriber(LaserScan, config.scan_topic, self.scan_callback, 10)
+        self.scan_subscriber = self.create_subscriber(LaserScan, config["scan_topic"], self.scan_callback, 10)
         self.scan_subscriber
 
     def timer_callback(self):
@@ -77,7 +86,7 @@ class MinimumFilterNode(Node):
         self.drive_msg.speed = drive_data[0]
         self.drive_msg.steering = drive_data[1]
 
-def main(args):
+def main(args=None):
     rclpy.init(args = args)
     node = MinimumFilterNode()
     rclpy.spin(node)

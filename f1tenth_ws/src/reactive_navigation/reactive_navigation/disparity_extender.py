@@ -1,37 +1,35 @@
 import rclpy
-from rclpy import Node
+from rclpy.node import Node
 import numpy as np
-from sensor_msgs import LaserScan
-from ackermann_msgs import AckermannDriveStamped
-from geometry_msgs import Twist
+from sensor_msgs.msg import LaserScan
+from ackermann_msgs.msg import AckermannDriveStamped
+from geometry_msgs.msg import Twist
 
-class Config:
-    def __init__(self):
-        # Disparity Extender config
-        self.safety_bubble_diameter = 0.6 #[m]
-        self.range_cutoff = 5 #[m]
-        self.disparity_threshold = 0.6 #[m]
-        self.speed_proportional_gain = 1
-        self.steering_proportional_gain = 1
-        self.max_speed = 10 #[m/s]
-        # ROS2 Config
-        self.publish_rate = 100 #[Hz]
-        self.drive_topic = "/drive"
-        self.ranges_topic = "/scan"
+config = {
+    "safety_bubble_diameter": 0.7, # [m]
+    "range_cutoff": 5, # [m]
+    "disparity_threshold": 0.6, # [m]
+    "linear_x_proportional_gain": 1,
+    "angular_z_proportional_gain": 0.4,
+    "max_speed": 8.0, # [m/s]
+    "publish_rate": 100, # [Hz]
+    "drive_topic": "/drive",
+    "ranges_topic": "/scan"
+}
 
 class DisparityExtender:
     def __init__(self):
-        c = Config()
-        self.safety_bubble_diameter = c.safety_bubble_diameter
-        self.range_cutoff = c.range_cutoff
-        self.disparity_threshold = c.disparity_threshold
-        self.max_speed = c.max_speed
-        self.speed_proportional_gain = c.speed_proportional_gain
-        self.steering_proportional_gain = c.steering_proportional_gain
+        self.safety_bubble_diameter = config["safety_bubble_diameter"]
+        self.range_cutoff = config["range_cutoff"]
+        self.disparity_threshold = config["disparity_threshold"]
+        self.max_speed = config["max_speed"]
+        self.linear_x_proportional_gain = config["linear_x_proportional_gain"]
+        self.angular_z_proportional_gain = config["angular_z_proportional_gain"]
 
     def update(self, ranges, angle_increment):
         # mean front distance
-        front_index = int(len(ranges)//2)
+        ranges = np.array(ranges)
+        front_index = int(ranges.shape[0]//2)
         front_range = ranges[front_index]
         arc = front_range * angle_increment
         index_count = int(self.safety_bubble_diameter/arc/2)
@@ -43,10 +41,9 @@ class DisparityExtender:
             if abs(ranges[i] - ranges[i-1]) > self.disparity_threshold:
                 if ranges[i] < ranges[i-1]:
                     r = ranges[i]
-                    arc = angle_increment * r
                 else:
-                    i -= i
-                    r = ranges[i-1]
+                    i -= 1
+                    r = ranges[i]
                 arc = angle_increment * r
                 radius_count = int(self.safety_bubble_diameter/arc/2)
                 lower_bound = i-radius_count 
@@ -61,7 +58,7 @@ class DisparityExtender:
         radius_count = int(self.safety_bubble_diameter/arc/2)
         lower_bound = minimum_index-radius_count 
         upper_bound = minimum_index+radius_count+1
-        marked_point = [lower_bound, upper_bound, r]
+        marked_point = [lower_bound, upper_bound, 0]
         marked_indexes.append(marked_point)
         
         ### APPLY MARKS ###
@@ -73,20 +70,19 @@ class DisparityExtender:
         max_index = np.argmax(ranges)
         goal_bearing = angle_increment * (max_index - ranges.shape[0]//2)
 
-        steering = self.steering_proportional_gain * goal_bearing
-        speed = min(mean_front_range/self.range_cutoff,1) * self.max_speed * self.speed_proportional_gain
+        angular_z = float(self.angular_z_proportional_gain * goal_bearing)
+        linear_x = float(min(mean_front_range/self.range_cutoff * self.linear_x_proportional_gain,1) * self.max_speed)
 
-        return speed, steering
+        return linear_x, angular_z
 
 
 class DisparityExtenderNode(Node):
     def __init__(self):
         super().__init__('disparity_extender')
 
-        c = Config()
-        self.publish_rate = c.publish_rate
-        self.drive_topic = c.drive_topic
-        self.laser_topic = c.ranges_topic
+        self.publish_rate = config["publish_rate"]
+        self.drive_topic = config["drive_topic"]
+        self.laser_topic = config["ranges_topic"]
 
         self.de = DisparityExtender()
 
