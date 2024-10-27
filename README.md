@@ -41,3 +41,8 @@ mkdir <package name>
 touch ./<package name>/__init__.py
 mkdir scripts
 ```
+
+## Resources
+
+-   [PlotJuggler](https://github.com/facontidavide/PlotJuggler)
+-   [Python Virtual Environments](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
