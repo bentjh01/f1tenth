@@ -24,11 +24,15 @@ class Twist2Ackermann(Node):
         ack_msg = AckermannDriveStamped()
         ack_msg.header.stamp = self.get_clock().now().to_msg()
         ack_msg.header.frame_id = config["header_frame_id"]
-        ack_msg.drive.steering_angle = np.arctan(config["wheel_base"] / msg.angular.z)
+        if msg.angular.z == 0:
+            ack_msg.drive.steering_angle = 0.0
+        else:
+            ack_msg.drive.steering_angle = np.arctan(config["wheel_base"] / msg.angular.z)
         ack_msg.drive.speed = msg.linear.x
         self.pub.publish(ack_msg)
 
 def main():
+    rclpy.init()
     twist_to_ackermann = Twist2Ackermann()
     rclpy.spin(twist_to_ackermann)
     twist_to_ackermann.destroy_node()
