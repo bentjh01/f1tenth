@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'my_node = f1tenth_control.my_node:main'
+            'twist2ackermann = f1tenth_control.twist2ackerman:main'
         ],
     },
 )
