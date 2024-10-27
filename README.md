@@ -5,10 +5,25 @@ used.
 
 ## Setup
 
-### 1. Clone this repository
+### This repo
+
+1. Clone this repo
 
 ```
 git clone https://github.com/bentjh01/BT_f1tenth.git
+```
+
+2. Setup a python virtual environment
+
+```
+# Install python venv
+pip install virtualenv
+# Creates new virtual environment
+python -m venv .venv
+# Activate virtual environment
+source .venv/bin/activate
+# Install requirements
+pip install -r venv_requirements.txt
 ```
 
 ### 2. Setup F1TENTH Simulator
