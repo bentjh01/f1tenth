@@ -2,3 +2,5 @@ f1tenth_ws/install
 f1tenth_ws/build
 f1tenth_ws/log
 .DS_Store
+.venv
+performance/rosbag2_2024_10_22-13_25_55
