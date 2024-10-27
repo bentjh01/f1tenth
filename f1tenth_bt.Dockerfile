@@ -13,7 +13,8 @@ RUN apt-get update && \
     git \
     neovim \
     tmux \
-    python3-pip
+    python3-pip \ 
+    ros-foxy-ackermann-msgs
 
 # Startup
 RUN echo "source /opt/ros/foxy/setup.bash" >> /root/.bashrc
