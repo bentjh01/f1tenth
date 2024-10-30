@@ -27,6 +27,7 @@ used.
     - List of Algorithms
         - Reactive Navigation
             - Minimum Filter
+            - Search Algorithm e.g. A\* or Dijkstra
         - Global Planning
             - SLAM
                 - gmapping
@@ -44,7 +45,7 @@ used.
 
 5. train neural network on dataset
 
-6. train reinforment learner on environment
+6. train reinforment learner on environment maybe Isaac Sim
 
 ## Setup
 
