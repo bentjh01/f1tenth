@@ -6,11 +6,11 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from geometry_msgs.msg import Twist
 
 config = {
-    "safety_bubble_diameter": 0.7, # [m]
+    "safety_bubble_diameter": 0.8, # [m]
     "range_cutoff": 5, # [m]
     "disparity_threshold": 0.6, # [m]
     "linear_x_proportional_gain": 1,
-    "angular_z_proportional_gain": 0.4,
+    "angular_z_proportional_gain": 0.6,
     "max_speed": 8.0, # [m/s]
     "publish_rate": 100, # [Hz]
     "drive_topic": "/drive",
