@@ -1,5 +1,7 @@
 # F1TENTH
 
+[Setup](#setup) | [Startup Instructions](#startup-instructions) | [Resources](#resources)
+
 Hello, this repo functions to hold the f1tenth workspace on ROS2 Foxy as well as any evaluations made on the algorithms
 used.
 
@@ -9,8 +11,35 @@ f1tenth
 │   └── ...
 ├── f1tenth_ws //ROS2 PACKAGES
 │   └── ...
+├── f1tenth_gym_ros //ROS2 simulator
+│   └── ...
 └── performance //EVALUATION
     └── ...
+```
+
+## Startup Instructions
+
+### Mac
+
+1. Start containers in detached mode, and exec into `f1tenth_gym_ros-sim-1`.
+
+```
+./run_f1tenth_sim_mac.sh
+```
+
+2. Start the simulator from the interative termial of `f1tenth_gym_ros-sim-1`.
+
+```
+./start.sh
+```
+
+3. Open the `novnc` from the browser for display  
+   [localhost:8080/vnc.html](http://localhost:8080/vnc.html)
+
+4. Exec into `f1tenth_bt`
+
+```
+./run_f1tenth_mac.sh
 ```
 
 ## Timeline/ Plan
