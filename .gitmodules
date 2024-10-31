@@ -1,0 +1,6 @@
+[submodule "f1tenth-gym-ros"]
+	path = f1tenth-gym-ros
+	url = https://github.com/f1tenth/f1tenth_gym_ros.git
+[submodule "f1tenth_gym_ros"]
+	path = f1tenth_gym_ros
+	url = https://github.com/f1tenth/f1tenth_gym_ros.git
