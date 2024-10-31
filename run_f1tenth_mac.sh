@@ -3,7 +3,7 @@
 container_name="f1tenth_bt"
 
 function create_ws_container {
-    docker run -it --rm \
+    docker run -dt --rm \
         --name $container_name \
         -h "f1tenth_bt" \
         --network=host \
@@ -19,6 +19,8 @@ else
     echo "Starting container"
     docker compose -f ./f1tenth_gym_ros/docker-compose.yml up -d
     create_ws_container
+
+    docker exec -it f1tenth_gym_ros-sim-1 bash
     
     docker stop ${container_name}
     docker stop f1tenth_gym_ros-novnc-1
