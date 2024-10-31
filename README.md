@@ -89,7 +89,7 @@ pip install -r venv_requirements.txt
 ### 2. Setup F1TENTH Simulator
 
 ```
-https://github.com/f1tenth/f1tenth_gym_ros.git
+https://github.com/bentjh01/f1tenth_gym_ros.git
 ```
 
 ## Creating a new package
@@ -102,8 +102,15 @@ touch ./<package name>/__init__.py
 mkdir scripts
 ```
 
+## Build Docker image
+
+```
+docker build -t [maker:name] .
+```
+
 ## Resources
 
 -   [PlotJuggler](https://github.com/facontidavide/PlotJuggler)
 -   [Python Virtual Environments](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
 -   [MarPlotLib Img](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html)
+-   [f1tenth/f1tenth_gym_ros.git](https://github.com/f1tenth/f1tenth_gym_ros.git)
