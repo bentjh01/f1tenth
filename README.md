@@ -3,6 +3,16 @@
 Hello, this repo functions to hold the f1tenth workspace on ROS2 Foxy as well as any evaluations made on the algorithms
 used.
 
+```
+f1tenth
+├── dep //DEPRECATED
+│   └── ...
+├── f1tenth_ws //ROS2 PACKAGES
+│   └── ...
+└── performance //EVALUATION
+    └── ...
+```
+
 ## Timeline/ Plan
 
 1. Code a simple algorithm to complete rounds around a track to obtain starting data
@@ -12,15 +22,21 @@ used.
         - node to convert
         - able to make consecutive laps minimum 5
 
-2. Create libreary to analyse alogorithm performance
+2. Create library to analyse alogorithm performance
 
     - Metrics:
         - fastest lap,
         - consecutive laps.
+        - consistent path
     - Rules:
+
         - starts from 5m away from a lap counter line.
         - said line is perpendicular to the wall of the track
         - said line is located at a stright.
+
+    - Visualisation:
+        - starting and ending points of the recording,
+        -
 
 3. Code more algorithms with the same requirements as before and collect data on them in a rosbag
 
