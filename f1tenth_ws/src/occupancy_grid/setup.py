@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'maps'
+package_name = 'occupancy_grid'
 
 setup(
     name=package_name,
