@@ -16,6 +16,15 @@ f1tenth
 └── performance //EVALUATION
     └── ...
 ```
+## Setup
+1. Clone the repository. 
+```
+git clone --recurse-submodules https://github.com/bentjh01/f1tenth.git
+```
+2. Build the containers
+```
+docker build -f f1tenth_bt.Dockerfile -t bentjh01:f1tenth-foxy .
+```
 
 ## Startup Instructions
 
